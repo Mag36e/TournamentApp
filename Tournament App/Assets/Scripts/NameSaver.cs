@@ -10,6 +10,7 @@ public class NameSaver : MonoBehaviour
     [Header("Names")] 
     public List<TMP_InputField> names = new List<TMP_InputField>();
 
+    public Dictionary<int, string> namesList = new Dictionary<int, string>();
 
     private void Start()
     {
@@ -24,13 +25,13 @@ public class NameSaver : MonoBehaviour
             name.onEndEdit.AddListener(delegate
             {
                 if (name.text == "") return;
-                UpdateNames(name.text);
+                UpdateNames(name.text, names.IndexOf(name));
             });
         }
     }
 
-    void UpdateNames(string name)
+    void UpdateNames(string name, int number)
     {
-        Debug.Log(name);
+        namesList[number] = name;
     }
 }

@@ -15,6 +15,7 @@ const HomeScreen = () => {
     async function loadFont() {
       await Font.loadAsync({
         'InterBlack': require('./assets/fonts/InterBlack.ttf'),
+        'Inter': require('./assets/fonts/InterRegular.ttf'),
       });
       setFontLoaded(true);
     }

@@ -5,14 +5,13 @@ import AddButton from '../assets/AddButton';
 import RemoveButton from '../assets/RemoveButton';
 import StartTournamentButton from '../assets/StartTournamentRound';
 import { useNavigation } from '@react-navigation/native';
-
-
+import { Player, StackNavigation } from '../_layout';
 
 const SwissRoundScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigation>();
   const [text, setText] = useState('');
 
-  const [inputs, setInputs] = useState([]);
+  const [inputs, setInputs] = useState<string[]>([]);
   let maxNumberOfPlayers = 8;
 
   const addPlayer = () => {
@@ -29,34 +28,38 @@ const SwissRoundScreen = () => {
     }
   };
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (index: number, value: string) => {
     const updatedInputs = [...inputs];
     updatedInputs[index] = value;
     setInputs(updatedInputs);
   };
 
   const handleTournamentStart = () => {
-    const cleanPlayerList = inputs
-    .filter(input => input.trim() !== '')
-    .map((playerName, index) => ({
-      id: index + 1,
-      name: playerName,
-      points: 0,
-      rounds: 0,
-      matches: 0,
-      matchWinrate: '0%',
-      roundWinrate: '0%',
-    }));
+    const cleanPlayerList: Player[] = inputs
+      .filter(input => input.trim() !== '')
+      .map((playerName, index) => ({
+        id: index + 1,
+        name: playerName,
+        points: 0,
+        rounds: 0,
+        matches: 0,
+        matchWinrate: '0%',
+        roundWinrate: '0%',
+        seat: 0,
+        roundScore: 0,
+        opponents: [],
+        currentOpponent: null as unknown as Player,
+      }));
 
 
-    if (cleanPlayerList.length < 2){
-      Alert.alert("Info", "Minimum number of players are 2")
+    if (cleanPlayerList.length < 4){
+      Alert.alert("Info", "Minimum number of players are 4")
     }
     else if (cleanPlayerList.length%2 == 1) {
       Alert.alert("info", "Must be an equal number of players")
     }
     else{
-      navigation.navigate('SwissTournament', { players: cleanPlayerList });
+      navigation.navigate('SwissTournament', { players: cleanPlayerList }); 
     }
   };
   
@@ -74,7 +77,7 @@ const SwissRoundScreen = () => {
               style={{marginBottom: 5, backgroundColor: 'rgba(249,100,50,0.99)', borderRadius: 10, width: 100}}
               placeholder="Name"
               onChangeText={(text) => handleInputChange(index, text)}
-              defualtValue={text}>
+              >
             </TextInput>
           ))}
           <View style={{alignContent: 'center', flexDirection: 'row', justifyContent: 'space-between', gap: 10}}>

@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './index';
 import SwissRoundScreen from './SwissRound';
 import SwissTournament from './SwissRound/Tournament';
+import { NavigationProp } from '@react-navigation/native';
 
 export interface Player {
   id: number;
@@ -12,6 +13,10 @@ export interface Player {
   matches: number;
   matchWinrate: string;
   roundWinrate: string;
+  seat: number;
+  roundScore: number;
+  opponents: Player[];
+  currentOpponent: Player;
 }
 
 export type RootTabParamList = {
@@ -22,6 +27,10 @@ export type RootTabParamList = {
   }
 }
 
+export type ScreenNames = ["Home", "SwissRound", "SwissTournament"]
+export type RootStackParamList = Record<ScreenNames[number], any>;
+export type StackNavigation = NavigationProp<RootStackParamList>;
+
 const Stack = createNativeStackNavigator<RootTabParamList>();
 
 export default function StackNavigator() {
@@ -29,7 +38,7 @@ export default function StackNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Home">
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="SwissRound" component={SwissRoundScreen} />
-      <Stack.Screen name="SwissTournament" component={SwissTournament} initialParams={{ players: undefined }}/>
+      <Stack.Screen name="SwissTournament" component={SwissTournament} />
     </Stack.Navigator>
   )
 }
